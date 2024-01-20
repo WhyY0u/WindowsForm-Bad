@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -48,13 +49,15 @@ namespace WorldSkils2
             ErrorBox.ForeColor = panel.BackColor;
             timer.Interval = 300;
             timer.Tick += TimerTick;
-            
+            label10.ForeColor = panel.BackColor;
+
             timer.Start();
 
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
+
             switch (error)
             {
                 case Error.NullName:
@@ -96,6 +99,13 @@ namespace WorldSkils2
                 ErrorPassword.ForeColor = panel.BackColor;
 
             }
+
+            if (Base.CheckLogin(textBox2.Text)) {
+                label10.ForeColor = panel.BackColor;
+            } else {
+                label10.ForeColor = Color.Red;
+            }
+
         }
 
 
@@ -141,19 +151,21 @@ namespace WorldSkils2
         private void label7_MouseClick(object sender, MouseEventArgs e)
         {
             readRules = true;
+            string filePath = "C:/Users/User/source/repos/WorldSkils2/Rules.txt";
+            Process.Start(filePath);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
 
             error = Error.NULL;
-            if (Password.Text.Length <= 5) error = Error.LengthPassword;
+            if (Password.Text.Length < 5) error = Error.LengthPassword;
             if (!readRules) error = Error.NotReadRules;
             if (!checkBox1.Checked) error = Error.NotAcceptRules;
             if (!radioButton2.Checked && !radioButton1.Checked) error = Error.NullGender;
-            if (textBox1.Text.Length < 0) error = Error.NullName;
-            if (Password.Text.Length < 0) error = Error.NullPassword;
-            if (textBox2.Text.Length < 0) error = Error.NullLogin;
+            if (textBox1.Text.Length <= 0) error = Error.NullName;
+            if (Password.Text.Length <= 0) error = Error.NullPassword;
+            if (textBox2.Text.Length <= 0) error = Error.NullLogin;
            
           
 
@@ -193,17 +205,23 @@ namespace WorldSkils2
             }
             ErrorBox.Location = new Point((Width / 2) - (TextRenderer.MeasureText(ErrorBox.Text, ErrorBox.Font).Width / 2), Height - 90);
 
+            Console.WriteLine(Password.Text.Equals(Password2.Text));
+            Console.WriteLine(Password.TextLength >= 5);
+            Console.WriteLine(error == Error.NULL) ;
+            Console.WriteLine(error);
 
-            if (Password.Text.Equals(Password2.Text) && Password.TextLength > 5 && Password.Text.Length < 0 && error == Error.NULL)
+            if (Password.Text.Equals(Password2.Text) && Password.TextLength >= 5 && error == Error.NULL)
             {
-                if (!readRules)
+                DateTime birthDate = DateTime.Parse(BirthDay.Text);
+                if (Base.Register(textBox1.Text, textBox2.Text, Password.Text, birthDate.ToString("yyyy-MM-dd"), radioButton1.Checked ? "Male" : "Female", ((int)numericUpDown1.Value)))
                 {
-                    ErrorBox.ForeColor = Color.Red;
+                    this.Hide();
+
+                    Login login = new Login();
+                    login.ShowDialog();
+             
                 }
-                else
-                {
-                    ErrorBox.ForeColor = panel.BackColor;
-                }
+                
             }
         }
 

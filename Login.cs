@@ -80,6 +80,18 @@ namespace WorldSkils2
                 Error.ForeColor = Color.Red;
             }
             Error.Location = new Point((Width / 2) - (TextRenderer.MeasureText(Error.Text, Error.Font).Width / 2) , Height - 120);
+
+            if(PasswordBox.TextLength > 0 && LoginBox.TextLength > 0) {
+               if (Base.Login(LoginBox.Text, PasswordBox.Text) != null)
+                {
+                    MessageBox.Show("Login Suces");
+                } else
+                {
+                    Error.Text = "Ошибка: Неверный Логин или Пароль";
+                    Error.Location = new Point((Width / 2) - (TextRenderer.MeasureText(Error.Text, Error.Font).Width / 2), Height - 120);
+                    Error.ForeColor = Color.Red;
+                }
+            } 
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -91,7 +103,7 @@ namespace WorldSkils2
         {
            
 
-            if(PasswordBox.TextLength > 0 && LoginBox.TextLength > 0)
+            if(PasswordBox.TextLength > 0 && LoginBox.TextLength > 0 && (PasswordBox.Focused || LoginBox.Focused))
             {
                 Error.ForeColor = panel.BackColor;
             }

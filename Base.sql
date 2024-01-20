@@ -1,0 +1,8 @@
+﻿CREATE DATABASE IF NOT EXISTS TestBase;
+
+USE TestBase;
+
+CREATE TABLE IF NOT EXISTS Users (
+    id INT PRIMARY KEY,
+    Name VARCHAR(45)
+);
